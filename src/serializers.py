@@ -4,29 +4,44 @@ from .models import *
 from rest_framework import serializers, validators
 from django.contrib.auth.password_validation import validate_password
         
-class BookAirPlaneTicketSerializer(serializers.ModelSerializer):
+class HotelSerializer(serializers.ModelSerializer):
     class Meta:
-        model=AirPlaneTicket
-        fields=('id','Fullnames','PassportDetails','Traveltime','FlightAirline','FlightClass','PaymentInformation')
-        
-    
-class HotelReservationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=HotelReservation
-        fields=('id','Fullnames','HotelName','CheckIn','CheckOut','NumberOfRooms')
-        
-class UberReservationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=UberReservation
-        fields=('id','Fullnames','PickUpLocation','DropoffLocation','pickUpDate','pickUpTime')
-     
+        model=Hotel
+        fields=('id','name','sector',
+            'district','province','stars','working_hours','thumbnail')
 
-class TourSerializer(serializers.ModelSerializer):
+class RoomSerializer(serializers.ModelSerializer):
     class Meta:
-        model=Tour
-        fields=('id','Fullnames','TourDate','TourCampany')
-     
+        model=Room
+        fields=('id','hotel','capacity',
+            'thumbnail','price_choices')
 
+class BookHotelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=BookedHotel
+        fields=('id','user','hotel')
+
+class UberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Uber
+        fields=('id','name','price')
+
+class UberCarsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=UberCars
+        fields=('id','uber','plateno','seats','driver_name','driver_tel',
+            'workedhours','price_hour','payment')
+
+class BookedUberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=BookedUber
+        fields=('id','user','uber')
+
+class PlaneSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Plane
+        fields=('id','company','travelway','names','passport',
+            'classplane','Airport_departure','location_arrival','payment_info')
 
 class RegisterUserSerializer(serializers.ModelSerializer):
     password1 = serializers.CharField(write_only=True, required=True, validators=[validate_password])

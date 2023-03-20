@@ -9,21 +9,18 @@ from knox.auth import AuthToken
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from django.shortcuts import render
 
-# Create your views here.
-
-
 
 
 # Create your views here.
 @api_view(['GET','POST'])
-def Flight_customer(request):
+def Hotel(request):
     if request.method =='GET':
-        customer=AirPlaneTicket.objects.all()
-        serializer= BookAirPlaneTicketSerializer(customer, many=True)
-        return Response({"customers":serializer.data})
+        hotel=Hotel.objects.all()
+        serializer= HotelSerializer(customer, many=True)
+        return Response({"hotel":serializer.data})
 
     if request.method =='POST':
-        serializer=BookAirPlaneTicketSerializer(data=request.data)
+        serializer=HotelSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
         return Response(serializer.data,status=status.HTTP_201_CREATED)
@@ -52,9 +49,6 @@ def Flight_customer_details(request, id):
     elif request.method=="DELETE":
         customer.delete()
         return Response("Delete Successful", status=status.HTTP_204_CONTENT)
-
-
-
 
 
 
