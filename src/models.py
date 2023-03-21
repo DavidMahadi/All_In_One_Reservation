@@ -16,7 +16,7 @@ class Hotel(models.Model):
     province=models.CharField(max_length=100) 
     stars=models.PositiveSmallIntegerField(choices=start_choice, default=1)
     working_hours=models.IntegerField()
-    thumbnail=models.ImageField()
+    thumbnail=models.ImageField(upload_to ='uploads/')
 
     def __str__(self):
         return self.name
