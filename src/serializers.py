@@ -95,3 +95,15 @@ class RegisterUserSerializer(serializers.ModelSerializer):
 
 
         return user
+
+class changeSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    certificate = serializers.FileField()
+    class Meta:
+        model=ChangeType
+        fields=("id","user","certificate"),
+        extra_kwargs = {
+        [
+            'certificate':{'required': True},
+            ]
+            }

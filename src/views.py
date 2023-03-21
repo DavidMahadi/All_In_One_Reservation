@@ -9,48 +9,7 @@ from knox.auth import AuthToken
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from django.shortcuts import render
 
-
-
 # Create your views here.
-@api_view(['GET','POST'])
-def Hotel(request):
-    if request.method =='GET':
-        hotel=Hotel.objects.all()
-        serializer= HotelSerializer(customer, many=True)
-        return Response({"hotel":serializer.data})
-
-    if request.method =='POST':
-        serializer=HotelSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-        return Response(serializer.data,status=status.HTTP_201_CREATED)
-
-
-@api_view(['GET','PUT','DELETE'])
-def Flight_customer_details(request, id):
-    try:
-        customer=AirPlaneTicket.objects.get(pk=id)
-
-    except customer.DoesNotExist:
-        return Response(status=satus.HTTP_401_NOT_FOUND)
-
-    if request.method =='GET':
-        serializer= BookAirPlaneTicketSerializer(customer)  
-        return Response(serializer.data)
-
-
-    elif request.method =='PUT':        
-        serializer= BookAirPlaneTicketSerializer(customer, data=request.data)  
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_401_BAD_REQUEST)
-
-    elif request.method=="DELETE":
-        customer.delete()
-        return Response("Delete Successful", status=status.HTTP_204_CONTENT)
-
-
 
 @api_view(['POST'])
 def register(request):
@@ -72,6 +31,8 @@ def register(request):
         })
 
 
+
+
 @api_view(["POST"])
 def login(request):
     serializer= AuthTokenSerializer(data=request.data)
@@ -88,3 +49,18 @@ def login(request):
         },
         'token':token
         })
+
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated, ))
+def changeType(request):
+    if request.method == 'POST':
+        data = request.data 
+        data['user'] = request.user.id
+        print(data)
+        serializer=changeSerializer(data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        return Response("something goes wrong",status=status.HTTP_400_BAD_REQUEST)
