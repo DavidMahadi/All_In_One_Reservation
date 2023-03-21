@@ -10,7 +10,6 @@ from rest_framework.authtoken.serializers import AuthTokenSerializer
 from django.shortcuts import render
 
 # Create your views here.
-
 @api_view(['POST'])
 def register(request):
     serializer = RegisterUserSerializer(data=request.data)
@@ -64,3 +63,67 @@ def changeType(request):
             serializer.save()
             return Response(serializer.data,status=status.HTTP_201_CREATED)
         return Response("something goes wrong",status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET','POST'])
+def HotelModel(request):
+    if request.method=='GET':
+        VarHotel=Hotel.objects.all()
+        serializer=HotelSerializer(VarHotel,many=True)
+        return Response(serializer.data)
+    
+    if request.method=='POST':
+        serializer=HotelSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+    
+@api_view(['GET','PUT','DELETE'])
+def HotelModelDelete(request,pk):
+    try:
+        VarHotel=Hotel.objects.get(pk=pk)
+    except:
+        return Response("no valid data")
+    if request.method=='GET':
+        serializer=HotelSerializer(VarHotel)
+        return Response(serializer.data)
+    elif request.method=='PUT':
+        serializer=HotelSerializer(VarHotel,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+    elif request.method == 'DELETE': 
+         VarHotel.delete() 
+         return Response({'message': 'Hotel was deleted successfully!'})
+     
+@api_view(['GET','POST'])
+def RoomModel(request):
+    if request.method=='GET':
+        VarRoom=Room.objects.all()
+        serializer=RoomSerializer(VarRoom,many=True)
+        return Response(serializer.data)
+    if request.method=='POST':
+        serializer=RoomSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+    
+@api_view(['GET','PUT','DELETE'])
+def RoomDelete(request,pk):
+    try:
+        VarRoom=Room.objects.get(pk=pk)
+    except:
+        return Response("no valid data")
+    if request.method=='GET':
+        serializer=RoomSerializer(VarRoom)
+        return Response(serializer.data)
+    elif request.method=='PUT':
+        serializer=RoomSerializer(VarRoom,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+    elif request.method == 'DELETE': 
+         VarHotel.delete() 
+         return Response({'message': 'Hotel was deleted successfully!'})
+    
