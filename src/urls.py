@@ -6,6 +6,6 @@ from .views import *
 
 urlpatterns = [
     path('hotelPost/',HotelModel,name='getHotel'),
-    path('hotelDelete/',HotelModelDelete,name='deleteHotel'),
+    path('hotelDelete/<int:pk>',HotelModelDelete,name='deleteHotel'),
     
 ]
