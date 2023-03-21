@@ -13,78 +13,68 @@ from django.shortcuts import render
 
 # Create your views here.
 @api_view(['GET','POST'])
-def Hotel(request):
-    if request.method =='GET':
-        hotel=Hotel.objects.all()
-        serializer= HotelSerializer(customer, many=True)
-        return Response({"hotel":serializer.data})
-
-    if request.method =='POST':
+def HotelModel(request):
+    if request.method=='GET':
+        VarHotel=Hotel.objects.all()
+        serializer=HotelSerializer(VarHotel,many=True)
+        return Response(serializer.data)
+    
+    if request.method=='POST':
         serializer=HotelSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-        return Response(serializer.data,status=status.HTTP_201_CREATED)
-
-
-@api_view(['GET','PUT','DELETE'])
-def Flight_customer_details(request, id):
-    try:
-        customer=AirPlaneTicket.objects.get(pk=id)
-
-    except customer.DoesNotExist:
-        return Response(status=satus.HTTP_401_NOT_FOUND)
-
-    if request.method =='GET':
-        serializer= BookAirPlaneTicketSerializer(customer)  
         return Response(serializer.data)
-
-
-    elif request.method =='PUT':        
-        serializer= BookAirPlaneTicketSerializer(customer, data=request.data)  
+    
+@api_view(['GET','PUT','DELETE'])
+def HotelModelDelete(request,pk):
+    try:
+        VarHotel=Hotel.objects.get(pk=pk)
+    except:
+        return Response("no valid data")
+    if request.method=='GET':
+        serializer=HotelSerializer(VarHotel)
+        return Response(serializer.data)
+    elif request.method=='PUT':
+        serializer=HotelSerializer(VarHotel,data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_401_BAD_REQUEST)
+        return Response(serializer.errors)
+    elif request.method == 'DELETE': 
+         VarHotel.delete() 
+         return Response({'message': 'Hotel was deleted successfully!'})
+     
+@api_view(['GET','POST'])
+def RoomModel(request):
+    if request.method=='GET':
+        VarRoom=Room.objects.all()
+        serializer=RoomSerializer(VarRoom,many=True)
+        return Response(serializer.data)
+    if request.method=='POST':
+        serializer=RoomSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+    
+@api_view(['GET','PUT','DELETE'])
+def RoomDelete(request,pk):
+    try:
+        VarRoom=Room.objects.get(pk=pk)
+    except:
+        return Response("no valid data")
+    if request.method=='GET':
+        serializer=RoomSerializer(VarRoom)
+        return Response(serializer.data)
+    elif request.method=='PUT':
+        serializer=RoomSerializer(VarRoom,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+    elif request.method == 'DELETE': 
+         VarHotel.delete() 
+         return Response({'message': 'Hotel was deleted successfully!'})              
+    
+    
 
-    elif request.method=="DELETE":
-        customer.delete()
-        return Response("Delete Successful", status=status.HTTP_204_CONTENT)
 
-
-
-@api_view(['POST'])
-def register(request):
-    serializer = RegisterUserSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-
-    user = serializer.save()
-    _,token = AuthToken.objects.create(user)
-
-
-    return Response({
-        "user_infos": {
-            "id": user.id,
-            "username": user.username,
-            "email": user.email
-        },
-        # "token":token,
-        "message": "Account Created Sucessfully."
-        })
-
-
-@api_view(["POST"])
-def login(request):
-    serializer= AuthTokenSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-
-    user= serializer.validated_data['user']
-
-    _,token=AuthToken.objects.create(user)
-
-    return Response({
-        'user_info':{
-            'id':user.id,
-            'username':user.username,
-        },
-        'token':token
-        })
