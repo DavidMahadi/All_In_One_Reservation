@@ -25,7 +25,6 @@ def register(request):
             "username": user.username,
             "email": user.email
         },
-        # "token":token,
         "message": "Account Created Sucessfully."
         })
 
@@ -51,7 +50,7 @@ def login(request):
 
 
 @api_view(['POST'])
-@permission_classes((IsAuthenticated, ))
+@permission_classes((IsAuthenticated,))
 def changeType(request):
     if request.method == 'POST':
         data = request.data 
@@ -65,8 +64,12 @@ def changeType(request):
         return Response("something goes wrong",status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET','POST'])
+@permission_classes((IsAuthenticated, ))
 def HotelModel(request):
     if request.method=='GET':
+        
+        if request.user.is_staff != True:
+            return Response({"message": "Get Out here"})
         VarHotel=Hotel.objects.all()
         serializer=HotelSerializer(VarHotel,many=True)
         return Response(serializer.data)
@@ -78,6 +81,7 @@ def HotelModel(request):
         return Response(serializer.data)
     
 @api_view(['GET','PUT','DELETE'])
+@permission_classes((IsAuthenticated, ))
 def HotelModelDelete(request,pk):
     try:
         VarHotel=Hotel.objects.get(pk=pk)
@@ -97,6 +101,7 @@ def HotelModelDelete(request,pk):
          return Response({'message': 'Hotel was deleted successfully!'})
      
 @api_view(['GET','POST'])
+@permission_classes((IsAuthenticated, ))
 def RoomModel(request):
     if request.method=='GET':
         VarRoom=Room.objects.all()
@@ -109,6 +114,7 @@ def RoomModel(request):
         return Response(serializer.data)
     
 @api_view(['GET','PUT','DELETE'])
+@permission_classes((IsAuthenticated, ))
 def RoomDelete(request,pk):
     try:
         VarRoom=Room.objects.get(pk=pk)

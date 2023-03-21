@@ -136,4 +136,4 @@ class ChangeType(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     certificate=models.ImageField(upload_to ='uploads/')
     def __str__(self):
-        return self.user
+        return self.user.first_name

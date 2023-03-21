@@ -99,7 +99,11 @@ class RegisterUserSerializer(serializers.ModelSerializer):
 class changeSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     certificate = serializers.FileField()
-    
+
     class Meta:
         model=ChangeType
-        fields=("id","certificate", "user"),
+        fields= [
+            "id",
+            "user",
+            "certificate"
+        ]
