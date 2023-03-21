@@ -134,6 +134,6 @@ class Plane(models.Model):
 
 class ChangeType(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
-    certificate=models.ImageField()
+    certificate=models.ImageField(upload_to ='uploads/')
     def __str__(self):
         return self.user
