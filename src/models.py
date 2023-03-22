@@ -36,20 +36,19 @@ class Room(models.Model):
         
     )
 
-
-    hotel:models.ForeignKey(Hotel,max_length=100, on_delete=models.CASCADE) 
+    room = models.ForeignKey(Hotel,on_delete=models.CASCADE,default= 1)
     capacity=models.PositiveSmallIntegerField(choices=roomcapacity, default=1)
     thumbnail =models.ImageField()
     price_choices=models.PositiveSmallIntegerField(choices=price_choice, default=1)
 
     def __str__(self):
-        return self.hotel
+        return self.room.name
 
 class BookedHotel(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     hotel=models.ForeignKey(Hotel,on_delete=models.CASCADE)
     def __str__(self):
-        return self.user
+        return self.user.email
 
 
 class Driver(models.Model):
@@ -69,8 +68,7 @@ class Uber(models.Model):
 
 class UberCars(models.Model):
     def price(self):
-        price=self.workedhours * self.price_hour
-        return price
+        return self.workedhours * self.price_hour
 
     uber=models.ForeignKey(Uber,on_delete=models.CASCADE)
     plateno=models.IntegerField()
@@ -89,7 +87,7 @@ class BookedUber(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     Uber=models.ForeignKey(Uber,on_delete=models.CASCADE)
     def __str__(self):
-        return self.user
+        return self.user.email
 
 
 
@@ -126,4 +124,4 @@ class Plane(models.Model):
     payment_info=models.CharField(max_length=300)
 
     def __str__(self):
-        return self.company
+        return self.names

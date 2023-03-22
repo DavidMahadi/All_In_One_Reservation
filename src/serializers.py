@@ -26,6 +26,11 @@ class UberSerializer(serializers.ModelSerializer):
         model=Uber
         fields=('id','name','price')
 
+class DriverSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Driver
+        fields=('id','name','tel')
+
 class UberCarsSerializer(serializers.ModelSerializer):
     class Meta:
         model=UberCars
