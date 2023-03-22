@@ -133,3 +133,40 @@ def RoomDelete(request,pk):
          VarHotel.delete() 
          return Response({'message': 'Hotel was deleted successfully!'})
     
+
+
+
+
+@api_view(['GET','POST'])
+@permission_classes((IsAuthenticated, ))
+def UberModel(request):
+    if request.method=='GET':
+        VarRoom=Room.objects.all()
+        serializer=RoomSerializer(VarRoom,many=True)
+        return Response(serializer.data)
+    if request.method=='POST':
+        serializer=RoomSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+    
+@api_view(['GET','PUT','DELETE'])
+@permission_classes((IsAuthenticated, ))
+def UberDelete(request,pk):
+    try:
+        VarRoom=Room.objects.get(pk=pk)
+    except:
+        return Response("no valid data")
+    if request.method=='GET':
+        serializer=RoomSerializer(VarRoom)
+        return Response(serializer.data)
+    elif request.method=='PUT':
+        serializer=RoomSerializer(VarRoom,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+    elif request.method == 'DELETE': 
+         VarHotel.delete() 
+         return Response({'message': 'Hotel was deleted successfully!'})
+    
