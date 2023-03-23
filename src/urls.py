@@ -11,14 +11,5 @@ urlpatterns = [
 
     path('hotelPost/',HotelModel,name='getHotel'),
     path('hotelDelete/<int:pk>',HotelModelDelete,name='deleteHotel'),
-
-    path('hotelPost/',HotelModel,name='getHotel'),
-    path('hotelDelete/<int:pk>',HotelModelDelete,name='deleteHotel'),
-
-    path('hotelPost/',HotelModel,name='getHotel'),
-    path('hotelDelete/<int:pk>',HotelModelDelete,name='deleteHotel'),
-
-    path('hotelPost/',HotelModel,name='getHotel'),
-    path('hotelDelete/<int:pk>',HotelModelDelete,name='deleteHotel'),
     
 ]

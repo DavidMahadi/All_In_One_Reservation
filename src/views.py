@@ -69,7 +69,7 @@ def HotelModel(request):
     if request.method=='GET':
         
         if request.user.is_staff != True:
-            return Response({"message": "Get Out here"})
+            return Response({"message": "Get Authenticated First"})
         VarHotel=Hotel.objects.all()
         serializer=HotelSerializer(VarHotel,many=True)
         return Response(serializer.data)
@@ -83,22 +83,30 @@ def HotelModel(request):
 @api_view(['GET','PUT','DELETE'])
 @permission_classes((IsAuthenticated, ))
 def HotelModelDelete(request,pk):
+    
     try:
         VarHotel=Hotel.objects.get(pk=pk)
     except:
         return Response("no valid data")
     if request.method=='GET':
+        if request.user.is_staff != True:
+            return Response({"message": "Get Authenticated First"})
+
         serializer=HotelSerializer(VarHotel)
         return Response(serializer.data)
     elif request.method=='PUT':
+        if request.user.is_staff != True:
+            return Response({"message": "Get Authenticated First"})
         serializer=HotelSerializer(VarHotel,data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors)
     elif request.method == 'DELETE': 
-         VarHotel.delete() 
-         return Response({'message': 'Hotel was deleted successfully!'})
+        if request.user.is_staff != True:
+            return Response({"message": "Get Authenticated First"})
+        VarHotel.delete() 
+        return Response({'message': 'Hotel was deleted successfully!'})
      
 @api_view(['GET','POST'])
 @permission_classes((IsAuthenticated, ))
